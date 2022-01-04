@@ -12,7 +12,7 @@ In vscode your workspace folder by default will be opened in `/home/coder/worksp
 
 ## Usage
 
-You can either build it yourself or use my dockerhub images. 
+You can either build it yourself or use my dockerhub images.
 
 The password is controlled by using the environment variable `PASSWORD`, if its not set, the password value will be in `~/.config/code-server/config.yaml`
 
@@ -21,11 +21,11 @@ The password is controlled by using the environment variable `PASSWORD`, if its 
 Building:
 
 ```
-$ docker build \
+$ docker buildx build --platform linux/amd64,linux/arm64 \
+  --push --tag pbicskei/vscode-server:latest \
   --build-arg USER=${USER} \
   --build-arg UID=${UID} \
-  --build-arg GID=${GID} \
-  -f Dockerfile -t vscode:default .
+  --build-arg GID=${GID} .
 ```
 
 Running with no extensions, using http and port 8080:
@@ -38,10 +38,10 @@ $ docker run -it \
   -u "$(id -u):$(id -g)" \
   -v $PWD/workspace:/home/coder/workspace \
   -v $PWD/config:/home/coder/.config \
-  vscode:default
+  pbicskei/vscode-server:latest
 ```
 
-Running with no extensions, using https and port 8443 (see [docs/minica](https://github.com/ruanbekker/docker-vscode-server/blob/main/docs/minica.md) to generate certs for local use):
+Running with no extensions, using https and port 8443 (see [docs/minica](https://github.com/pbicskei/docker-vscode-server/blob/main/docs/minica.md) to generate certs for local use):
 
 ```
 $ docker run -it \
@@ -55,7 +55,7 @@ $ docker run -it \
   -v $PWD/config:/home/coder/.config \
   -v $PWD/certs/cert.pem:/home/coder/.certs/cert.pem \
   -v $PWD/certs/key.pem:/home/coder/.certs/key.pem \
-  vscode:default
+  pbicskei/vscode-server:latest
 ```
 
 Running with extensions, using http and port 8080:
@@ -69,7 +69,7 @@ $ docker run -it \
   -u "$(id -u):$(id -g)" \
   -v $PWD/workspace:/home/coder/workspace \
   -v $PWD/config:/home/coder/.config \
-  vscode:default
+  pbicskei/vscode:default
 ```
 
 ### Dockerhub Images
@@ -84,10 +84,10 @@ $ docker run -it \
   -u "$(id -u):$(id -g)" \
   -v $PWD/workspace:/home/coder/workspace \
   -v $PWD/config:/home/coder/.config \
-  ruanbekker/vscode-server:slim
+  pbicskei//vscode-server:latest
 ```
 
-Running with no extensions, using https and port 8443 (see [docs/minica](https://github.com/ruanbekker/docker-vscode-server/blob/main/docs/minica.md) to generate certs for local use):
+Running with no extensions, using https and port 8443 (see [docs/minica](https://github.com/pbicskei/docker-vscode-server/blob/main/docs/minica.md) to generate certs for local use):
 
 ```
 $ docker run -it \
@@ -101,7 +101,7 @@ $ docker run -it \
   -v $PWD/config:/home/coder/.config \
   -v $PWD/certs/cert.pem:/home/coder/.certs/cert.pem \
   -v $PWD/certs/key.pem:/home/coder/.certs/key.pem \
-  ruanbekker/vscode-server:slim
+  pbicskei/vscode-server:latest
 ```
 
 Running with extensions, using http and port 8080:
@@ -115,7 +115,7 @@ $ docker run -it \
   -u "$(id -u):$(id -g)" \
   -v $PWD/workspace:/home/coder/workspace \
   -v $PWD/config:/home/coder/.config \
-  ruanbekker/vscode-server:slim
+  pbicskei/vscode-server:latest
 ```
 
 ### Persistence 
@@ -131,7 +131,7 @@ If you would like to persist your containers storage to your host for vscode's d
 
 Docker Image:
 
-- `ruanbekker/vscode-server:slim`
+- `pbicskei/vscode-server:slim`
 
 This image is the smallest one which includes the following os packages:
 
@@ -145,7 +145,7 @@ This image is the smallest one which includes the following os packages:
 
 Docker Image:
 
-- `ruanbekker/vscode-server:golang`
+- `pbicskei/vscode-server:golang`
 
 This image uses Go version `1.15.6`
 
@@ -153,7 +153,7 @@ This image uses Go version `1.15.6`
 
 Docker Image:
 
-- `ruanbekker/vscode-server:python`
+- `pbicskei/vscode-server:python`
 
 Includes the following python packages:
 
@@ -170,12 +170,12 @@ Includes the following python packages:
 
 ## Custom Builds
 
-You can extend or add your own software on-top of the base image by using `ruanbekker/vscode-server-base:3.7.4` as your base image.
+You can extend or add your own software on-top of the base image by using `pbicskei/vscode-server-base:3.7.4` as your base image.
 
 This is a sample:
 
 ```
-FROM ruanbekker/vscode-server-base:3.7.4
+FROM pbicskei/vscode-server-base:3.7.4
 USER root
 
 # start of your custom modifications
@@ -195,4 +195,4 @@ ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
 ## Docker Hub
 
-- [ruanbekker/vscode-server](https://hub.docker.com/r/ruanbekker/vscode-server)
+- [pbicskei/vscode-server](https://hub.docker.com/r/pbicskei/vscode-server)
