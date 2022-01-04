@@ -4,7 +4,7 @@ ARG USER
 ARG UID
 ARG GID
 
-ENV CODE_SERVER_VERSION 3.7.4
+ENV CODE_SERVER_VERSION 3.12.0
 ENV HTTPS_ENABLED false
 ENV APP_BIND_HOST 0.0.0.0
 ENV APP_PORT 8080
@@ -24,12 +24,12 @@ RUN ARCH="$(dpkg --print-architecture)" \
   && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i "s/# en_US.UTF-8/en_US.UTF-8/" /etc/locale.gen && locale-gen
-ENV LANG en_US.UTF-8
+ENV LANG en_US.UTF-8g
 
 RUN chsh -s /bin/bash
 ENV SHELL /bin/bash
 
-RUN adduser --gecos '' --disabled-password coder \
+RUN adduser --gecos '' --disabled-password ${USER} \
   && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
 
 RUN ARCH="$(dpkg --print-architecture)" \

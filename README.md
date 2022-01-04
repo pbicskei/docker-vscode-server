@@ -20,7 +20,7 @@ The password is controlled by using the environment variable `PASSWORD`, if its 
 
 Building:
 
-```
+```bash
 $ docker buildx build --platform linux/amd64,linux/arm64 \
   --push --tag pbicskei/vscode-server:latest \
   --build-arg USER=${USER} \
@@ -30,20 +30,33 @@ $ docker buildx build --platform linux/amd64,linux/arm64 \
 
 Running with no extensions, using http and port 8080:
 
-```
+```bash
 $ docker run -it \
   -e PASSWORD=password \
   -e DOCKER_USER=${USER} \
   -p 8080:8080 \
   -u "$(id -u):$(id -g)" \
-  -v $PWD/workspace:/home/coder/workspace \
-  -v $PWD/config:/home/coder/.config \
+  -v $PWD/workspace:/home/${USER}/workspace \
+  -v $PWD/config:/home/${USER}/.config \
   pbicskei/vscode-server:latest
 ```
 
+Same thing
+
+```bash
+docker run -d \                     
+  --env PASSWORD=password \
+  --env DOCKER_USER=${USER} \
+  --publish 8080:8080 \
+  --user "$(id -u):$(id -g)" \
+  --volume $PWD/workspace:/home/${USER}/workspace \
+  --volume $PWD/config:/home/${USER}/.config \
+  pbicskei/vscode-server:latest
+  ```
+
 Running with no extensions, using https and port 8443 (see [docs/minica](https://github.com/pbicskei/docker-vscode-server/blob/main/docs/minica.md) to generate certs for local use):
 
-```
+```bash
 $ docker run -it \
   -e PASSWORD=password \
   -e HTTPS_ENABLED=true \
@@ -60,7 +73,7 @@ $ docker run -it \
 
 Running with extensions, using http and port 8080:
 
-```
+```bash
 $ docker run -it \
   -e PASSWORD=password \
   -e DOCKER_USER=${USER} \
@@ -76,7 +89,7 @@ $ docker run -it \
 
 Running with no extensions, using http and port 8080:
 
-```
+```bash
 $ docker run -it \
   -e PASSWORD=password \
   -e DOCKER_USER=${USER} \
@@ -89,7 +102,7 @@ $ docker run -it \
 
 Running with no extensions, using https and port 8443 (see [docs/minica](https://github.com/pbicskei/docker-vscode-server/blob/main/docs/minica.md) to generate certs for local use):
 
-```
+```bash
 $ docker run -it \
   -e PASSWORD=password \
   -e HTTPS_ENABLED=true \
@@ -106,7 +119,7 @@ $ docker run -it \
 
 Running with extensions, using http and port 8080:
 
-```
+```bash
 $ docker run -it \
   -e PASSWORD=password \
   -e DOCKER_USER=${USER} \
