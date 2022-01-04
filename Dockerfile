@@ -12,14 +12,15 @@ ENV USER ${USER}
 ENV UID ${UID}
 ENV GID ${GID}
 
-RUN apt update \
+RUN ARCH="$(dpkg --print-architecture)" \
+ && apt update \
  && apt install \
     ca-certificates sudo curl dumb-init \
     htop locales git procps ssh vim \
     lsb-release wget openssl -y \
   #&& curl -fsSL https://code-server.dev/install.sh | sh \
-  && wget https://github.com/cdr/code-server/releases/download/v${CODE_SERVER_VERSION}/code-server_${CODE_SERVER_VERSION}_amd64.deb \
-  && dpkg -i code-server_${CODE_SERVER_VERSION}_amd64.deb && rm -f code-server_${CODE_SERVER_VERSION}_amd64.deb \
+  && wget https://github.com/cdr/code-server/releases/download/v${CODE_SERVER_VERSION}/code-server_${CODE_SERVER_VERSION}_${ARCH}.deb \
+  && dpkg -i code-server_${CODE_SERVER_VERSION}_${ARCH}.deb && rm -f code-server_${CODE_SERVER_VERSION}_${ARCH}.deb \
   && rm -rf /var/lib/apt/lists/*
 
 RUN sed -i "s/# en_US.UTF-8/en_US.UTF-8/" /etc/locale.gen && locale-gen
