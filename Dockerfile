@@ -30,20 +30,20 @@ RUN chsh -s /bin/bash
 ENV SHELL /bin/bash
 
 RUN adduser --gecos '' --disabled-password coder \
-  && echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
+  && echo "${USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/nopasswd
 
 RUN ARCH="$(dpkg --print-architecture)" \
   && curl -fsSL "https://github.com/boxboat/fixuid/releases/download/v0.4.1/fixuid-0.4.1-linux-$ARCH.tar.gz" | tar -C /usr/local/bin -xzf - \
   && chown root:root /usr/local/bin/fixuid \
   && chmod 4755 /usr/local/bin/fixuid \
   && mkdir -p /etc/fixuid \
-  && printf "user: coder\ngroup: coder\n" > /etc/fixuid/config.yml
+  && printf "user: ${USER}\ngroup: ${USER}\n" > /etc/fixuid/config.yml
 
 COPY bin/entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh
 
 USER 1000
-ENV USER=coder
-WORKDIR /home/coder
+ENV USER=${USER}
+WORKDIR /home/${USER}
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
